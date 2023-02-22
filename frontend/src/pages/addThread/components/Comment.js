@@ -4,9 +4,8 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
 import Axios from '../../../global/api/Axios'
 import { useNavigate, useLocation } from "react-router-dom";
-import { refreshToken } from '../../../global/api/getToken';
 import { useGlobalState } from '../../../global/api/ContextProvider';
-
+import FormData from 'form-data';
 
 export default function Comment(props) {
     const location = useLocation();
@@ -23,13 +22,17 @@ export default function Comment(props) {
     }
 
     async function submitThread() {
-        const thread = {
-            "reply_user": username,
-            "reply_content": content,
-            "reply_post": forumID
-        }
+        const form_data = new FormData();
+        form_data.append("reply_user", username);
+        form_data.append("reply_content", content);
+        form_data.append("reply_post", forumID);
+        // const thread = {
+        //     "reply_user": username,
+        //     "reply_content": content,
+        //     "reply_post": forumID
+        // }
         try {
-            await Axios.post("api/forum/thread/", thread);
+            await Axios.post("api/forum/thread/", form_data);
         } catch (err) {
             console.log(err);
         }

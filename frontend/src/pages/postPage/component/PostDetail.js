@@ -21,6 +21,7 @@ export default function PostDetail(props) {
             console.log(id);
             const response = await axios.get(`api/forum/forum/${id}/`);
             let data = await response.data;
+            console.log(data);
             setData(data);
             setThread(data.threads);
 
@@ -118,7 +119,19 @@ export default function PostDetail(props) {
                         {data.Post_content}
                     </Typography>
                 </Box>
-                <Divider variant="middle" />
+                {/* set image if it has one */}
+                {
+                    data.image != null ?
+                        <><Box
+                            component="img"
+                            sx={{
+                                maxHeight: { xs: 500, md: 500 },
+                                maxWidth: { xs: 300, md: 300 },
+                            }}
+                            alt="The house from the offer."
+                            src={data.image} /><Divider variant="middle" /></>
+                        : null
+                }
                 <Box sx={{ mt: 3, ml: 1, mb: 1 }}>
                     <Button variant="contained" onClick={handleAddComment.bind(this, data.id)}>Add comment</Button>
                 </Box>

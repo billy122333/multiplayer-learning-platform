@@ -1,38 +1,53 @@
 import React, { useEffect, useState } from 'react';
+import FormData from 'form-data';
 import { Box, TextField } from '@mui/material';
 import LoadingButton from '@mui/lab/LoadingButton';
 import SaveIcon from '@mui/icons-material/Save';
 import Axios from '../../../global/api/Axios'
 import { useNavigate } from "react-router-dom";
 import { useGlobalState } from '../../../global/api/ContextProvider';
+import Upload_img from './Upload_img';
 
 
 export default function PostForum() {
     const [title, setTitle] = useState("");
+    const [image_url, setImage_url] = useState("");
     const [content, setContent] = useState("");
+    // take username
     const [state] = useGlobalState();
     const { username } = state;
+
     const navigate = useNavigate();
-
+    // set loading state
     const [loading, setLoading] = useState(false);
+    const urls = 'http://127.0.0.1:8000/media/images/'
 
-
+    // onchange
     function titleOnchange(e) {
         setTitle(e.target.value);
     }
     function contentOnchange(e) {
         setContent(e.target.value);
     }
+    const Image_urlOnchange = image_url => {
+        setImage_url(image_url);
+    }
+    // new
+
 
 
     async function submitForm() {
-        const form = {
-            "Post_author": username,
-            "Post_title": title,
-            "Post_content": content
-        }
+        const form_data = new FormData();
+        if (image_url)
+            form_data.append("image", image_url, image_url.name);
+        form_data.append("Post_author", username);
+        form_data.append("Post_title", title);
+        form_data.append("Post_content", content);
+        form_data.append("is_active", true);
+
         try {
-            await Axios.post("/api/forum/forum/", form);
+            console.log('form_data', form_data)
+            await Axios.post("/api/forum/forum/", form_data);
         } catch (err) {
             console.log(err);
         }
@@ -62,12 +77,22 @@ export default function PostForum() {
             <h3 >
                 title
             </h3>
-            <TextField label={'title'} id="Post_title" value={title} onChange={titleOnchange} margin="dense" />
+            <TextField label='title' id="Post_title" value={title} onChange={titleOnchange} margin="dense" />
             <h3 >
                 content
             </h3>
-            <TextField label={'content'} id="Post_content" value={content} onChange={contentOnchange} margin="normal" />
-
+            <TextField
+                id="Post_content"
+                label='content'
+                multiline
+                rows={4}
+                value={content}
+                onChange={contentOnchange}
+            />
+            <h3 >
+                image
+            </h3>
+            <Upload_img setURL={setImage_url} />
 
             <LoadingButton
                 variant="contained"
@@ -78,7 +103,7 @@ export default function PostForum() {
                 startIcon={<SaveIcon />}
                 size="large"
                 sx={{
-                    top: "10px"
+                    top: "50px"
                 }}
             >
                 Save

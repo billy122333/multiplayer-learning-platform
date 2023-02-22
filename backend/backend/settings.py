@@ -27,6 +27,15 @@ TWILIO_WBAPI_SECRET = os.getenv('TWILIO_WBAPI_SECRET')
 TWILIO_SYNC_SERVICE_SID = os.getenv('TWILIO_SYNC_SERVICE_SID')
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+# change
+
+# Actual directory user files go to
+MEDIA_ROOT = os.path.join(os.path.dirname(BASE_DIR), 'mediafiles')
+
+# URL used to access the media
+MEDIA_URL = '/media/'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -174,7 +183,7 @@ REST_FRAMEWORK = {
 # Simple jwt
 
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME':timedelta(days=1),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
 }

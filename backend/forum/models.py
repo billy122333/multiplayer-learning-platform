@@ -2,6 +2,11 @@ from django.db import models
 import datetime
 
 
+# lets us explicitly set upload path and filename
+def upload_to(instance, filename):
+    return 'images/{filename}'.format(filename=filename)
+
+
 class Post(models.Model):
     # add user image after login
 
@@ -10,6 +15,8 @@ class Post(models.Model):
     Post_author = models.CharField(max_length=30, default="anonymous")
     Post_title = models.CharField(max_length=30)
     Post_content = models.CharField(max_length=1000)
+    # change
+    image = models.ImageField(upload_to=upload_to, max_length=1000, null=True)
     Post_created_date = models.DateTimeField(
         auto_now=True)
 
